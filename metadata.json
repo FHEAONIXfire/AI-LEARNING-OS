@@ -1,0 +1,5 @@
+{
+  "name": "AI Learning OS",
+  "description": "An adaptive AI Learning Copilot that personalizes education for students and lifelong learners with a futuristic, AI-native interface.",
+  "requestFramePermissions": ["microphone"]
+}
