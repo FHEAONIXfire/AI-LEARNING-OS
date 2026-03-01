@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Markdown from 'react-markdown';
 import { supabase } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
 import { 
@@ -51,8 +50,7 @@ import {
   Layers,
   Languages,
   Image as ImageIcon,
-  Loader2,
-  Send
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -74,38 +72,34 @@ const Sidebar = ({ active, onChange }: { active: Screen, onChange: (s: Screen) =
   ];
 
   return (
-    <aside className="fixed left-6 top-28 bottom-6 w-24 liquid-glass flex flex-col items-center py-10 gap-10 z-40 border border-white/10 shadow-2xl">
-      <nav className="flex flex-col gap-8">
+    <aside className="fixed left-0 top-0 h-full pt-20 w-20 glass border-r border-white/10 flex flex-col items-center py-8 gap-8 z-40">
+      <nav className="flex flex-col gap-6">
         {items.map((item) => (
           <button
             key={item.id}
             onClick={() => onChange(item.id)}
-            className={`p-4 rounded-3xl transition-all relative group border ${
-              active === item.id 
-                ? 'bg-blue-500/20 text-white border-blue-500/50 neon-glow-blue shadow-lg shadow-blue-500/20' 
-                : 'text-white/30 border-transparent hover:text-white hover:bg-white/5 hover:border-white/10'
+            className={`p-3 rounded-xl transition-all relative group ${
+              active === item.id ? 'bg-blue-500/10 text-blue-400 neon-glow-blue' : 'text-slate-400 hover:text-blue-400'
             }`}
             title={item.label}
           >
-            <item.icon size={28} />
-            <div className="absolute left-full ml-6 px-4 py-2 liquid-glass text-white text-[10px] font-black uppercase tracking-widest rounded-2xl opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10">
+            <item.icon size={24} />
+            <div className="absolute left-full ml-4 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
               {item.label}
             </div>
           </button>
         ))}
       </nav>
-      <div className="mt-auto flex flex-col gap-8">
+      <div className="mt-auto flex flex-col gap-6">
         <button 
           onClick={() => onChange('settings')}
-          className={`p-4 rounded-3xl transition-all relative group border ${
-            active === 'settings' 
-              ? 'bg-blue-500/20 text-white border-blue-500/50 neon-glow-blue shadow-lg shadow-blue-500/20' 
-              : 'text-white/30 border-transparent hover:text-white hover:bg-white/5 hover:border-white/10'
+          className={`p-3 rounded-xl transition-all relative group ${
+            active === 'settings' ? 'bg-blue-500/10 text-blue-400 neon-glow-blue' : 'text-slate-400 hover:text-white'
           }`}
           title={t('nav.settings')}
         >
-          <Settings size={28} />
-          <div className="absolute left-full ml-6 px-4 py-2 liquid-glass text-white text-[10px] font-black uppercase tracking-widest rounded-2xl opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10">
+          <Settings size={24} />
+          <div className="absolute left-full ml-4 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
             {t('nav.settings')}
           </div>
         </button>
@@ -147,49 +141,47 @@ const TopNav = ({ profile, user, onSignOut, onNavigate, onUpdateProfile }: { pro
   };
 
   return (
-    <header className="fixed top-6 left-6 right-6 z-50 liquid-glass px-8 py-4 border border-white/10 shadow-2xl">
-      <div className="max-w-[1800px] mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-5">
-          <div className="p-3 bg-blue-500/20 rounded-2xl neon-glow-blue border border-blue-500/30">
-            <Activity className="text-white" size={28} />
+    <header className="fixed top-0 w-full z-50 glass border-b border-white/10 px-6 py-3">
+      <div className="max-w-[1600px] mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-500/20 rounded-lg">
+            <Activity className="text-blue-500" size={24} />
           </div>
-          <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-400 bg-clip-text text-transparent glass-text-pop">
+          <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent">
             {t('app.title')}
           </h1>
         </div>
         
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           <div className="relative" ref={menuRef}>
             <button 
               onClick={() => setShowModeMenu(!showModeMenu)}
-              className="flex items-center gap-3 px-5 py-2.5 rounded-2xl liquid-glass border border-white/10 hover:border-white/30 transition-all group shadow-xl"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
             >
-              <span className="text-xs font-black text-white uppercase tracking-widest">
+              <span className="text-sm font-medium text-blue-400">
                 {currentMode === 'school' ? t('mode.school') : currentMode === 'university' ? t('mode.university') : t('mode.college')}
               </span>
-              <ChevronRight size={16} className={`text-white/60 transition-transform duration-500 ${showModeMenu ? 'rotate-90' : 'rotate-0'}`} />
+              <ChevronRight size={14} className={`text-blue-400 transition-transform ${showModeMenu ? 'rotate-90' : 'rotate-0'}`} />
             </button>
 
             <AnimatePresence>
               {showModeMenu && (
                 <motion.div 
-                  initial={{ opacity: 0, y: 15, scale: 0.9, filter: 'blur(10px)' }}
-                  animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                  exit={{ opacity: 0, y: 15, scale: 0.9, filter: 'blur(10px)' }}
-                  className="absolute right-0 mt-4 w-64 liquid-glass p-3 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-[60] border border-white/10 backdrop-blur-3xl"
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  className="absolute right-0 mt-2 w-56 glass-card rounded-2xl p-2 border border-white/10 shadow-2xl z-[60]"
                 >
                   {modes.map((m) => (
                     <button
                       key={m.id}
                       onClick={() => handleModeChange(m.level)}
-                      className={`w-full text-left px-5 py-4 rounded-2xl text-sm transition-all flex items-center justify-between group mb-1 last:mb-0 ${
-                        currentMode === m.id 
-                          ? 'bg-blue-500/20 text-white border border-blue-500/30 neon-glow-blue' 
-                          : 'text-white/40 hover:bg-white/5 hover:text-white border border-transparent'
+                      className={`w-full text-left px-4 py-3 rounded-xl text-sm transition-all flex items-center justify-between group ${
+                        currentMode === m.id ? 'bg-blue-500/10 text-blue-400' : 'text-slate-400 hover:bg-white/5 hover:text-white'
                       }`}
                     >
-                      <span className="font-black uppercase tracking-widest text-[10px]">{m.label}</span>
-                      {currentMode === m.id && <CheckCircle2 size={16} className="text-blue-400" />}
+                      <span>{m.label}</span>
+                      {currentMode === m.id && <CheckCircle2 size={14} className="text-blue-400" />}
                     </button>
                   ))}
                 </motion.div>
@@ -198,15 +190,15 @@ const TopNav = ({ profile, user, onSignOut, onNavigate, onUpdateProfile }: { pro
           </div>
           
           <div 
-            className="flex items-center gap-4 pl-8 border-l border-white/10 cursor-pointer hover:opacity-80 transition-all group"
+            className="flex items-center gap-3 pl-6 border-l border-white/10 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => onNavigate('settings')}
           >
             <div className="text-right hidden md:block">
-              <p className="text-base font-black text-white glass-text-pop tracking-tight">{profile?.full_name || 'Learner'}</p>
-              <p className="text-[10px] font-black secondary-text uppercase tracking-widest mt-0.5">{profile?.level_name || 'Level 1'}</p>
+              <p className="text-sm font-semibold">{profile?.full_name || 'Learner'}</p>
+              <p className="text-xs text-slate-400">{profile?.level_name || 'Level 1'}</p>
             </div>
-            <div className="relative">
-              <div className="size-12 rounded-3xl border-2 border-white/20 overflow-hidden shadow-2xl group-hover:border-blue-400/50 transition-all transform group-hover:scale-105">
+            <div className="relative group">
+              <div className="size-10 rounded-full border-2 border-blue-500/50 overflow-hidden">
                 <img 
                   src={profile?.avatar_url || `https://picsum.photos/seed/${user?.id}/100/100`} 
                   alt="Avatar" 
@@ -214,7 +206,7 @@ const TopNav = ({ profile, user, onSignOut, onNavigate, onUpdateProfile }: { pro
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="absolute -bottom-1 -right-1 size-4 bg-green-500 rounded-full border-2 border-slate-900 shadow-[0_0_15px_rgba(34,197,94,0.8)]"></div>
+              <div className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-[#0a0b14] shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
             </div>
           </div>
         </div>
@@ -227,67 +219,65 @@ const Dashboard = ({ stats, tasks, onToggleTask, onNavigate }: { stats: any, tas
   const { t } = useLanguage();
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 30, filter: 'blur(20px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      exit={{ opacity: 0, y: -30, filter: 'blur(20px)' }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="grid grid-cols-12 gap-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="grid grid-cols-12 gap-6"
     >
       {/* Mastery Overview */}
-      <div className="col-span-12 lg:col-span-8 liquid-glass p-10 flex flex-col md:flex-row items-center justify-between gap-10 relative overflow-hidden shadow-2xl border border-white/10">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/20 rounded-full blur-[100px] -mr-40 -mt-40 animate-pulse"></div>
-        <div className="flex-1 space-y-6 relative z-10">
-          <h3 className="text-4xl font-black text-white glass-text-pop tracking-tight">{t('dashboard.mastery_overview')}</h3>
-          <p className="secondary-text max-w-lg font-medium text-lg leading-relaxed">{t('dashboard.mastery_desc')}</p>
-          <div className="flex gap-4 pt-4">
-            <div className="px-6 py-3 rounded-3xl liquid-glass border border-white/10 shadow-xl">
-              <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">{t('dashboard.top_skill')}</span>
-              <p className="text-base font-black text-white glass-text-pop mt-1">{stats?.topSkill || t('dashboard.pending_analysis')}</p>
+      <div className="col-span-12 lg:col-span-8 liquid-glass p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div className="flex-1 space-y-4">
+          <h3 className="text-2xl font-bold">{t('dashboard.mastery_overview')}</h3>
+          <p className="text-slate-400 max-w-md">{t('dashboard.mastery_desc')}</p>
+          <div className="flex gap-4 pt-2">
+            <div className="px-4 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+              <span className="text-xs text-blue-400 font-bold uppercase tracking-wider">{t('dashboard.top_skill')}</span>
+              <p className="text-sm font-semibold">{stats?.topSkill || t('dashboard.pending_analysis')}</p>
             </div>
-            <div className="px-6 py-3 rounded-3xl liquid-glass border border-white/10 shadow-xl">
-              <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">{t('dashboard.goal')}</span>
-              <p className="text-base font-black text-white glass-text-pop mt-1">{stats?.goal || t('dashboard.set_goal')}</p>
+            <div className="px-4 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+              <span className="text-xs text-purple-400 font-bold uppercase tracking-wider">{t('dashboard.goal')}</span>
+              <p className="text-sm font-semibold">{stats?.goal || t('dashboard.set_goal')}</p>
             </div>
           </div>
         </div>
-        <div className="relative size-60 flex items-center justify-center">
-          <svg className="size-full transform -rotate-90" viewBox="0 0 100 100">
-            <circle className="text-white/5 stroke-current" cx="50" cy="50" fill="transparent" r="42" strokeWidth="10"></circle>
+        <div className="relative size-48 flex items-center justify-center">
+          <svg className="size-full" viewBox="0 0 100 100">
+            <circle className="text-white/5 stroke-current" cx="50" cy="50" fill="transparent" r="40" strokeWidth="8"></circle>
             <motion.circle 
-              initial={{ strokeDashoffset: 263.9 }}
-              animate={{ strokeDashoffset: 263.9 - (263.9 * (stats?.mastery || 0)) / 100 }}
-              transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-              className="text-blue-500 stroke-current neon-glow-blue" 
-              cx="50" cy="50" fill="transparent" r="42" strokeWidth="10" 
-              strokeDasharray="263.9" strokeLinecap="round"
+              initial={{ strokeDashoffset: 251.2 }}
+              animate={{ strokeDashoffset: 251.2 - (251.2 * (stats?.mastery || 0)) / 100 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="text-blue-500 stroke-current" 
+              cx="50" cy="50" fill="transparent" r="40" strokeLinecap="round" strokeWidth="8" 
+              style={{ strokeDasharray: 251.2 }}
             ></motion.circle>
           </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-5xl font-black text-white glass-text-pop tracking-tighter">{stats?.mastery || 0}%</span>
-            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-1">{t('dashboard.mastery')}</span>
+          <div className="absolute flex flex-col items-center">
+            <span className="text-4xl font-black text-white">{stats?.mastery || 0}%</span>
+            <span className="text-[10px] uppercase font-bold text-blue-400 tracking-widest">{t('dashboard.mastered')}</span>
           </div>
         </div>
       </div>
 
-
       {/* Readiness & Confidence */}
-      <div className="col-span-12 lg:col-span-4 flex flex-col gap-8">
-        <div className="liquid-glass p-8 flex flex-col justify-between border border-white/10 shadow-2xl">
-          <div className="flex items-center justify-between mb-6">
-            <h4 className="font-black flex items-center gap-3 text-white glass-text-pop uppercase tracking-widest text-xs">
-              <Zap className="text-blue-400" size={20} /> {t('dashboard.exam_readiness')}
+      <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+        <div className="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="font-bold flex items-center gap-2 text-slate-300">
+              <Zap className="text-blue-500" size={18} /> {t('dashboard.exam_readiness')}
             </h4>
-            <span className="text-3xl font-black text-blue-400 glass-text-pop">{stats?.readiness || 0}%</span>
+            <span className="text-xl font-bold text-blue-500">{stats?.readiness || 0}%</span>
           </div>
-          <div className="space-y-4">
-            <div className="h-8 w-full bg-white/5 rounded-full overflow-hidden flex p-1.5 border border-white/10 shadow-inner">
+          <div className="space-y-3">
+            <div className="h-6 w-full bg-white/5 rounded-full overflow-hidden flex p-1 border border-white/10">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${stats?.readiness || 0}%` }}
                 className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full neon-glow-blue"
               ></motion.div>
             </div>
-            <div className="flex justify-between text-[10px] font-black text-white/20 uppercase tracking-widest">
+            <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
               <span>{t('dashboard.critical')}</span>
               <span>{t('dashboard.stable')}</span>
               <span className="text-blue-400">{t('dashboard.optimized')}</span>
@@ -295,114 +285,92 @@ const Dashboard = ({ stats, tasks, onToggleTask, onNavigate }: { stats: any, tas
           </div>
         </div>
 
-        <div className="liquid-glass p-8 border border-white/10 shadow-2xl">
-          <div className="flex items-center justify-between mb-6">
-            <h4 className="font-black flex items-center gap-3 text-white glass-text-pop uppercase tracking-widest text-xs">
-              <BarChart3 className="text-purple-400" size={20} /> {t('dashboard.confidence_index')}
+        <div className="glass-card rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="font-bold flex items-center gap-2 text-slate-300">
+              <BarChart3 className="text-purple-500" size={18} /> {t('dashboard.confidence_index')}
             </h4>
             <div className="text-right">
-              <span className="text-3xl font-black text-white glass-text-pop">{stats?.confidence || 0}%</span>
-              <span className="text-xs text-green-400 font-black block mt-1">+5.2%</span>
+              <span className="text-xl font-bold">{stats?.confidence || 0}%</span>
+              <span className="text-xs text-green-400 block">+5.2%</span>
             </div>
           </div>
-          <div className="h-24 flex items-end gap-2 px-1">
+          <div className="h-16 flex items-end gap-1 px-1">
             {[30, 50, 40, 60, 80, 75, 100].map((h, i) => (
               <motion.div 
                 key={i}
                 initial={{ height: 0 }}
                 animate={{ height: `${h}%` }}
-                transition={{ delay: i * 0.1, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                className="flex-1 bg-gradient-to-t from-purple-600/20 to-purple-400 rounded-t-xl relative group border-t border-x border-purple-500/30"
-              >
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 liquid-glass text-white text-[10px] font-black px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 border border-white/10 shadow-2xl z-20">
-                  {h}%
-                </div>
-              </motion.div>
+                transition={{ delay: i * 0.1 }}
+                className={`w-full bg-purple-500/40 rounded-t ${i === 6 ? 'bg-purple-500 neon-glow-purple' : ''}`}
+              ></motion.div>
             ))}
           </div>
         </div>
       </div>
 
       {/* Weakness Alert */}
-      <div className="col-span-12 lg:col-span-8 liquid-glass p-8 border border-white/10 shadow-2xl">
-        <div className="flex items-center justify-between mb-8">
+      <div className="col-span-12 lg:col-span-8 glass-card rounded-2xl p-6">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex flex-col">
-            <h4 className="font-black flex items-center gap-3 text-white glass-text-pop uppercase tracking-widest text-xs">
-              <AlertTriangle className="text-red-400" size={20} /> {t('dashboard.neural_weakness_alert')}
+            <h4 className="font-bold flex items-center gap-2 text-slate-300">
+              <AlertTriangle className="text-red-500" size={18} /> {t('dashboard.neural_weakness_alert')}
             </h4>
-            <p className="text-[10px] font-black secondary-text uppercase tracking-widest mt-2">{t('dashboard.weakness_desc')}</p>
+            <p className="text-xs text-slate-500 mt-1">{t('dashboard.weakness_desc')}</p>
           </div>
-          <button 
-            onClick={() => onNavigate('heatmap')} 
-            className="px-4 py-2 liquid-glass border border-blue-500/30 text-blue-400 text-[10px] font-black hover:bg-blue-500/10 transition-all uppercase tracking-widest rounded-xl neon-glow-blue"
-          >
-            {t('dashboard.run_diagnostic')}
-          </button>
+          <button onClick={() => onNavigate('heatmap')} className="text-blue-400 text-xs font-bold hover:underline">{t('dashboard.run_diagnostic')}</button>
         </div>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-3">
           {(stats?.weaknesses?.length > 0 ? stats.weaknesses : (stats?.subjects?.length > 0 ? stats.subjects : [])).map((topic: string) => (
-            <div 
-              key={topic} 
-              onClick={() => onNavigate('heatmap')} 
-              className="px-6 py-4 rounded-3xl liquid-glass border border-red-500/20 flex items-center gap-4 neon-glow-red group cursor-pointer hover:bg-red-500/10 transition-all transform hover:scale-105"
-            >
-              <div className="size-3 rounded-full bg-red-400 shadow-[0_0_12px_rgba(248,113,113,0.8)] animate-pulse"></div>
+            <div key={topic} onClick={() => onNavigate('heatmap')} className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-3 neon-glow-red group cursor-pointer hover:bg-red-500/20 transition-all">
+              <div className="size-2 rounded-full bg-red-500"></div>
               <div>
-                <p className="text-base font-black text-red-400 glass-text-pop">{topic}</p>
-                <p className="text-[10px] font-black text-red-400/40 uppercase tracking-widest">{t('dashboard.critical_review')}</p>
+                <p className="text-sm font-bold text-red-400">{topic}</p>
+                <p className="text-[10px] text-slate-400">{t('dashboard.needs_reinforcement')}</p>
               </div>
+              <ChevronRight size={14} className="text-red-400 group-hover:translate-x-1 transition-transform" />
             </div>
           ))}
           {(!stats?.weaknesses?.length && !stats?.subjects?.length) && (
-            <p className="text-sm font-bold secondary-text">{t('dashboard.no_weaknesses')}</p>
+            <p className="text-sm text-slate-500">{t('dashboard.no_weaknesses')}</p>
           )}
         </div>
       </div>
 
-      {/* Daily Study Plan */}
-      <div className="col-span-12 lg:col-span-4 liquid-glass p-8 border border-white/10 shadow-2xl">
-        <div className="flex items-center justify-between mb-8">
-          <h4 className="font-black flex items-center gap-3 text-white glass-text-pop uppercase tracking-widest text-xs">
-            <Calendar className="text-blue-400" size={20} /> {t('dashboard.daily_study_plan')}
-          </h4>
-          <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">{new Date().toLocaleDateString()}</span>
+      {/* Smart Plan */}
+      <div className="col-span-12 lg:col-span-4 glass-card rounded-2xl p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-bold flex items-center gap-2">
+            <Sparkles className="text-blue-500" size={18} /> {t('dashboard.smart_plan')}
+          </h3>
+          <span className="text-[10px] font-bold text-slate-500 bg-white/5 px-2 py-1 rounded">MAY 24</span>
         </div>
         <div className="space-y-4">
           {tasks.map((task, i) => (
             <div 
               key={task.id} 
               onClick={() => onToggleTask(task.id)}
-              className={`p-5 rounded-3xl border cursor-pointer transition-all flex items-center gap-4 group ${
-                task.is_done 
-                  ? 'bg-green-500/10 border-green-500/30 opacity-60' 
-                  : 'bg-white/5 border-white/10 hover:border-white/30'
-              }`}
+              className={`p-4 rounded-xl bg-white/5 border border-white/5 hover:border-blue-500/30 transition-all group cursor-pointer ${task.is_done ? 'opacity-60' : ''}`}
             >
-              <div className={`size-6 rounded-lg border flex items-center justify-center transition-all ${
-                task.is_done 
-                  ? 'bg-green-500 border-green-400 text-white' 
-                  : 'border-white/20 text-transparent group-hover:text-blue-400 group-hover:bg-blue-500/10'
-              }`}>
-                {task.is_done && <CheckCircle2 size={14} />}
-              </div>
-              <div className="flex-1">
-                <p className={`text-sm font-black text-white group-hover:text-blue-400 transition-colors ${task.is_done ? 'line-through' : ''}`}>{task.title}</p>
-                <p className="text-[10px] font-black secondary-text uppercase tracking-widest mt-1">{task.sub_text}</p>
+              <div className="flex items-start gap-3">
+                <div className={`mt-1 size-5 rounded border flex items-center justify-center transition-all ${
+                  task.is_done ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'border-white/20 text-transparent group-hover:text-blue-400 group-hover:bg-blue-500/10'
+                }`}>
+                  <CheckCircle2 size={14} />
+                </div>
+                <div>
+                  <p className={`text-sm font-semibold group-hover:text-blue-400 transition-colors ${task.is_done ? 'line-through' : ''}`}>{task.title}</p>
+                  <p className="text-xs text-slate-500 mt-1">{task.sub_text}</p>
+                </div>
               </div>
               {task.is_recommended && (
                 <div className="mt-3 flex items-center gap-2">
-                  <span className="size-2 rounded-full bg-purple-500 animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.8)]"></span>
-                  <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">{t('dashboard.recommended_now')}</span>
+                  <span className="size-2 rounded-full bg-purple-500 animate-pulse"></span>
+                  <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest">{t('dashboard.recommended_now')}</span>
                 </div>
               )}
             </div>
           ))}
-          <button 
-            onClick={() => onNavigate('planner')}
-            className="w-full py-4 liquid-glass border border-white/10 text-white/40 text-[10px] font-black uppercase tracking-widest hover:text-white hover:border-white/30 transition-all rounded-2xl mt-4"
-          >
-            {t('dashboard.view_full_schedule')}
-          </button>
         </div>
       </div>
     </motion.div>
@@ -765,69 +733,62 @@ const AITutor = ({ profile, user, onViewReport, onUpdateStats }: { profile?: any
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="grid grid-cols-12 gap-6 h-[calc(100vh-160px)] relative"
+      className="grid grid-cols-12 gap-6 h-[calc(100vh-160px)]"
     >
       <audio ref={audioRef} hidden />
       
       {/* Left Panel: Adaptive Test & Practice Tracking */}
-      <div className="col-span-12 lg:col-span-5 liquid-glass p-8 flex flex-col relative overflow-hidden border border-white/10 shadow-2xl">
-        <div className="flex items-center justify-between mb-8">
-          <h3 className="text-xl font-black flex items-center gap-3 glass-text-pop">
-            <ClipboardCheck className="text-blue-400" size={24} /> {t('tutor.adaptive_test_center')}
+      <div className="col-span-12 lg:col-span-5 liquid-glass p-6 flex flex-col relative overflow-hidden border border-white/5">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-bold flex items-center gap-2">
+            <ClipboardCheck className="text-blue-400" size={20} /> {t('tutor.adaptive_test_center')}
           </h3>
           <div className="flex gap-2">
-            <span className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
+            <span className="px-2 py-1 bg-blue-500/10 text-blue-400 rounded text-[10px] font-bold uppercase">
               {practicedTopics.length} {t('tutor.topics_studied')}
             </span>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-8">
+        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6">
           {!currentTest ? (
-            <div className="h-full flex flex-col items-center justify-center text-center space-y-8 p-10">
-              <div className="size-24 rounded-3xl bg-blue-500/10 flex items-center justify-center neon-glow-blue border border-blue-500/20">
-                <Brain className="text-blue-400" size={48} />
+            <div className="h-full flex flex-col items-center justify-center text-center space-y-6 p-8">
+              <div className="size-20 rounded-full bg-blue-500/10 flex items-center justify-center">
+                <Brain className="text-blue-400" size={40} />
               </div>
-              <div className="space-y-3">
-                <h4 className="font-black text-2xl text-white glass-text-pop">{t('tutor.ready_challenge')}</h4>
-                <p className="secondary-text text-sm font-medium">{t('tutor.generate_test_desc')}</p>
+              <div className="space-y-2">
+                <h4 className="font-bold text-xl">{t('tutor.ready_challenge')}</h4>
+                <p className="text-sm text-slate-400">{t('tutor.generate_test_desc')}</p>
               </div>
               <button 
                 onClick={startTest}
                 disabled={isThinking || practicedTopics.length === 0}
-                className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-sm neon-glow-blue hover:brightness-110 transition-all disabled:opacity-50 shadow-lg shadow-blue-500/20"
+                className="px-8 py-3 bg-blue-500 text-white rounded-xl font-bold neon-glow-blue hover:brightness-110 transition-all disabled:opacity-50"
               >
                 {isThinking ? t('tutor.generating_test') : t('tutor.start_test')}
               </button>
             </div>
           ) : (
-            <div className="space-y-10">
+            <div className="space-y-8">
               <div className="flex items-center justify-between">
-                <h4 className="font-black text-blue-400 uppercase tracking-widest text-xs">{currentTest.test_title}</h4>
-                <button onClick={() => setCurrentTest(null)} className="text-[10px] font-black text-white/40 hover:text-white uppercase tracking-widest transition-colors">{t('tutor.cancel')}</button>
+                <h4 className="font-bold text-blue-400">{currentTest.test_title}</h4>
+                <button onClick={() => setCurrentTest(null)} className="text-xs text-slate-500 hover:text-white">{t('tutor.cancel')}</button>
               </div>
               
               {currentTest.questions?.map((q: any, idx: number) => (
-                <div key={q.id} className="space-y-6 p-6 liquid-glass border-white/5 shadow-xl">
-                  <p className="text-sm font-bold leading-relaxed"><span className="text-blue-400 mr-2 font-black">Q{idx + 1}.</span> {q.question}</p>
-                  <div className="grid grid-cols-1 gap-3">
+                <div key={q.id} className="space-y-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                  <p className="text-sm font-medium"><span className="text-blue-400 mr-2">Q{idx + 1}.</span> {q.question}</p>
+                  <div className="grid grid-cols-1 gap-2">
                     {q.options?.map((opt: string, optIdx: number) => (
                       <button
                         key={optIdx}
                         onClick={() => setTestAnswers(prev => ({ ...prev, [q.id]: optIdx }))}
-                        className={`p-4 text-left text-xs rounded-2xl border transition-all font-bold flex items-center gap-4 group ${
+                        className={`p-3 text-left text-xs rounded-lg border transition-all ${
                           testAnswers[q.id] === optIdx 
-                            ? 'bg-blue-500/20 border-blue-500/50 text-white neon-glow-blue' 
-                            : 'bg-white/5 border-white/10 text-white/40 hover:border-white/30 hover:text-white'
+                            ? 'bg-blue-500/20 border-blue-500 text-blue-400' 
+                            : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
                         }`}
                       >
-                        <span className={`size-8 rounded-xl flex items-center justify-center text-[10px] font-black border transition-all ${
-                          testAnswers[q.id] === optIdx 
-                            ? 'bg-blue-500 text-white border-blue-400' 
-                            : 'bg-white/5 text-white/20 border-white/10 group-hover:bg-white/10 group-hover:text-white'
-                        }`}>
-                          {String.fromCharCode(65 + optIdx)}
-                        </span>
                         {opt}
                       </button>
                     ))}
@@ -836,22 +797,22 @@ const AITutor = ({ profile, user, onViewReport, onUpdateStats }: { profile?: any
               ))}
 
               {testFeedback ? (
-                <div className="p-8 bg-green-500/10 border border-green-500/30 rounded-3xl text-center space-y-6 shadow-2xl shadow-green-500/10">
-                  <p className="text-2xl font-black text-green-400 glass-text-pop">{testFeedback.message}</p>
-                  <div className="flex flex-col gap-4">
+                <div className="p-6 bg-green-500/10 border border-green-500/30 rounded-2xl text-center space-y-4">
+                  <p className="text-lg font-bold text-green-400">{testFeedback.message}</p>
+                  <div className="flex flex-col gap-3">
                     <button 
                       onClick={() => onViewReport(testFeedback.reportId)}
-                      className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-sm neon-glow-blue flex items-center justify-center gap-3 shadow-lg shadow-blue-500/20"
+                      className="w-full py-3 bg-blue-500 text-white rounded-xl font-bold neon-glow-blue flex items-center justify-center gap-2"
                     >
-                      <BarChart3 size={20} /> {t('tutor.view_report')}
+                      <BarChart3 size={18} /> {t('tutor.view_report')}
                     </button>
-                    <button onClick={startTest} className="text-[10px] font-black text-white/40 hover:text-blue-400 uppercase tracking-widest transition-colors">{t('tutor.try_another')}</button>
+                    <button onClick={startTest} className="text-sm font-bold text-slate-400 hover:text-blue-400 transition-colors">{t('tutor.try_another')}</button>
                   </div>
                 </div>
               ) : (
                 <button 
                   onClick={submitTest}
-                  className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-lg neon-glow-blue shadow-xl shadow-blue-500/20"
+                  className="w-full py-4 bg-blue-500 text-white rounded-xl font-bold neon-glow-blue"
                 >
                   {t('tutor.submit_test')}
                 </button>
@@ -862,76 +823,71 @@ const AITutor = ({ profile, user, onViewReport, onUpdateStats }: { profile?: any
       </div>
 
       {/* Right Panel: Interactive AI Tutor */}
-      <div className="col-span-12 lg:col-span-7 liquid-glass p-8 flex flex-col border-white/10 relative overflow-hidden shadow-2xl">
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03] animate-scanline bg-gradient-to-b from-transparent via-blue-400 to-transparent h-20 w-full z-10"></div>
-        
-        <div className="flex items-center justify-between mb-8 relative z-20">
-          <div className="flex items-center gap-4">
-            <div className="size-14 rounded-3xl bg-blue-500/20 flex items-center justify-center neon-glow-blue border border-blue-500/30">
-              <Brain className="text-blue-400" size={28} />
+      <div className="col-span-12 lg:col-span-7 liquid-glass p-6 flex flex-col border-blue-500/20 relative">
+        <div className="scanline"></div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-blue-500/20 flex items-center justify-center neon-glow-blue">
+              <Brain className="text-blue-400" size={20} />
             </div>
             <div>
-              <p className="text-xl font-black text-white glass-text-pop">{t('tutor.interactive_tutor')}</p>
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">{t('tutor.voice_text')}</span>
-              </div>
+              <p className="text-sm font-bold">{t('tutor.interactive_tutor')}</p>
+              <p className="text-[10px] text-green-400 font-mono">{t('tutor.voice_text')}</p>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button 
               onClick={() => setShowHistory(!showHistory)}
-              className="flex items-center gap-2 px-4 py-2 liquid-glass border-white/10 text-white/60 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-slate-400 rounded-xl text-xs font-bold hover:bg-white/10 transition-all"
             >
               <History size={16} /> {t('tutor.history')}
             </button>
             <button 
               onClick={createNewSession}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-500/30 transition-all neon-glow-blue"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-xl text-xs font-bold hover:bg-blue-500/30 transition-all"
             >
               <PlusSquare size={16} /> {t('tutor.new_chat')}
             </button>
             <button 
               onClick={() => setShowTextbookModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-purple-500/30 transition-all neon-glow-purple"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/30 transition-all"
             >
-              <ImageIcon size={16} /> {t('tutor.ask_textbook')}
+              <PlusSquare size={16} /> {t('tutor.ask_textbook')}
             </button>
           </div>
         </div>
 
-        <div className="flex-1 space-y-8 overflow-y-auto pr-2 custom-scrollbar relative z-20">
+        <div className="flex-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar relative">
           {showHistory && (
             <motion.div 
-              initial={{ opacity: 0, x: 30, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, x: 30, filter: 'blur(10px)' }}
-              className="absolute inset-0 z-50 bg-slate-950/90 backdrop-blur-2xl p-8 rounded-3xl border border-white/10 overflow-y-auto shadow-2xl"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="absolute inset-0 z-10 bg-[#0B0F1C]/95 backdrop-blur-sm p-6 rounded-xl border border-white/10 overflow-y-auto"
             >
-              <div className="flex items-center justify-between mb-8">
-                <h4 className="font-black text-blue-400 uppercase tracking-widest text-xs glass-text-pop">{t('tutor.chat_history')}</h4>
-                <button onClick={() => setShowHistory(false)} className="text-white/40 hover:text-white transition-colors font-black uppercase tracking-widest text-[10px]">{t('tutor.close')}</button>
+              <div className="flex items-center justify-between mb-6">
+                <h4 className="font-bold text-blue-400 uppercase tracking-widest text-xs">{t('tutor.chat_history')}</h4>
+                <button onClick={() => setShowHistory(false)} className="text-slate-500 hover:text-white">{t('tutor.close')}</button>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {sessions.map(session => (
                   <div 
                     key={session.id}
                     onClick={() => loadSession(session.id)}
-                    className={`p-5 rounded-2xl border cursor-pointer transition-all flex items-center justify-between group ${
+                    className={`p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
                       activeSessionId === session.id 
-                        ? 'bg-blue-500/20 border-blue-500/50 shadow-lg shadow-blue-500/10' 
-                        : 'bg-white/5 border-white/5 hover:border-white/20'
+                        ? 'bg-blue-500/10 border-blue-500/50' 
+                        : 'bg-white/5 border-white/10 hover:bg-white/10'
                     }`}
                   >
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-bold truncate ${activeSessionId === session.id ? 'text-white' : 'text-white/60'}`}>{session.title}</p>
-                      <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mt-1">{new Date(session.timestamp).toLocaleString()}</p>
+                      <p className="text-sm font-bold truncate">{session.title}</p>
+                      <p className="text-[10px] text-slate-500">{new Date(session.timestamp).toLocaleString()}</p>
                     </div>
                     <button 
                       onClick={(e) => deleteSession(session.id, e)}
-                      className="p-2 text-white/20 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-2 text-slate-600 hover:text-red-400 transition-colors"
                     >
-                      <Trash2 size={16} />
+                      <PlusSquare className="rotate-45" size={16} />
                     </button>
                   </div>
                 ))}
@@ -940,76 +896,66 @@ const AITutor = ({ profile, user, onViewReport, onUpdateStats }: { profile?: any
           )}
 
           {messages.map((msg, i) => (
-            <motion.div 
-              key={i} 
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              className={`flex flex-col gap-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
-            >
+            <div key={i} className={`space-y-2 ${msg.role === 'user' ? 'text-right' : ''}`}>
               {msg.role === 'model' && (
-                <div className="flex items-center gap-2 text-blue-400 mb-1 ml-2">
-                  <Sparkles size={14} className="animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{t('tutor.ai_response')}</span>
+                <div className="flex items-center gap-2 text-blue-400 mb-1">
+                  <Sparkles size={14} />
+                  <span className="text-[10px] font-bold uppercase tracking-widest">{t('tutor.ai_response')}</span>
                 </div>
               )}
-              <div className={`inline-block p-6 rounded-3xl text-sm leading-relaxed max-w-[85%] font-medium shadow-xl ${
-                msg.role === 'user' 
-                  ? 'bg-blue-600/20 border border-blue-500/30 text-white rounded-tr-none shadow-blue-500/10' 
-                  : 'liquid-glass border-white/10 text-white rounded-tl-none'
+              <div className={`inline-block p-4 rounded-2xl text-sm leading-relaxed max-w-[85%] ${
+                msg.role === 'user' ? 'bg-blue-500/20 border border-blue-500/30 text-white ml-auto' : 'bg-white/5 text-slate-300'
               }`}>
                 <div className="prose prose-invert prose-sm max-w-none">
-                  <Markdown>{msg.parts[0].text}</Markdown>
+                  {msg.parts[0]?.text?.split('\n').map((line, idx) => (
+                    <p key={idx} className="mb-2">{line}</p>
+                  ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
           
           {isThinking && (
-            <div className="flex items-center gap-3 text-blue-400 ml-2">
-              <Loader2 className="animate-spin" size={20} />
-              <span className="text-xs font-black uppercase tracking-widest">{t('tutor.ai_thinking')}</span>
+            <div className="flex items-center gap-2 text-blue-400">
+              <Loader2 className="animate-spin" size={16} />
+              <span className="text-xs font-bold uppercase tracking-widest">{t('tutor.ai_thinking')}</span>
             </div>
           )}
           <div ref={chatEndRef} />
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 flex gap-4 relative z-20">
+        <div className="mt-6 pt-6 border-t border-white/10 flex gap-3">
           <div className="relative flex-1">
-            <textarea 
+            <input 
+              type="text" 
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              className="w-full bg-white/5 border border-white/10 rounded-3xl py-4 pl-6 pr-16 text-white placeholder-white/20 focus:outline-none focus:border-blue-500/50 transition-all resize-none max-h-32 font-medium"
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-4 pr-12 text-sm focus:outline-none focus:border-blue-500/50"
               placeholder={t('tutor.ask_placeholder')}
-              rows={1}
             />
             <button 
               onClick={() => handleSend()}
-              disabled={isThinking || !input.trim()}
-              className="absolute right-3 top-1/2 -translate-y-1/2 size-12 bg-blue-600 text-white rounded-2xl neon-glow-blue disabled:opacity-50 flex items-center justify-center hover:brightness-110 transition-all shadow-lg shadow-blue-500/20"
+              disabled={isThinking}
+              className="absolute right-2 top-2 p-2 bg-blue-500 text-white rounded-lg neon-glow-blue disabled:opacity-50"
             >
-              <Send size={20} />
+              <ArrowRight size={20} />
             </button>
           </div>
           <button 
             onClick={toggleListening}
-            className={`p-5 rounded-2xl transition-all relative border ${
+            className={`p-4 rounded-xl transition-all relative ${
               isListening 
-                ? 'bg-red-500/20 text-red-400 border-red-500/50 neon-glow-red' 
-                : 'bg-white/5 border-white/10 text-white/40 hover:text-blue-400 hover:border-blue-500/30'
+                ? 'bg-red-500/20 text-red-400 border border-red-500/50 neon-glow-red' 
+                : 'bg-white/5 border border-white/10 text-slate-400 hover:text-blue-400'
             }`}
             title={isListening ? t('tutor.stop_listening') : t('tutor.voice_input')}
           >
-            <Mic size={24} className={isListening ? 'animate-pulse' : ''} />
+            <Mic size={20} className={isListening ? 'animate-pulse' : ''} />
             {isListening && (
-              <span className="absolute -top-1 -right-1 flex h-4 w-4">
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
               </span>
             )}
           </button>
@@ -1025,26 +971,26 @@ const AITutor = ({ profile, user, onViewReport, onUpdateStats }: { profile?: any
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowTextbookModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-2xl"
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 30, filter: 'blur(20px)' }}
-              animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, scale: 0.9, y: 30, filter: 'blur(20px)' }}
-              className="relative w-full max-w-2xl liquid-glass rounded-[40px] p-12 border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl glass-card rounded-3xl p-8 border border-white/10 shadow-2xl"
             >
-              <div className="flex items-center justify-between mb-10">
-                <div className="flex items-center gap-6">
-                  <div className="size-16 rounded-3xl bg-purple-500/20 flex items-center justify-center neon-glow-purple border border-purple-500/30">
-                    <FileText className="text-purple-400" size={32} />
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-purple-500/20 rounded-xl">
+                    <FileText className="text-purple-400" size={24} />
                   </div>
                   <div>
-                    <h3 className="text-3xl font-black text-white glass-text-pop">{t('tutor.ask_textbook_title')}</h3>
-                    <p className="secondary-text text-sm font-medium">{t('tutor.ask_textbook_desc')}</p>
+                    <h3 className="text-xl font-bold">{t('tutor.ask_textbook_title')}</h3>
+                    <p className="text-slate-400 text-sm">{t('tutor.ask_textbook_desc')}</p>
                   </div>
                 </div>
-                <button onClick={() => setShowTextbookModal(false)} className="p-2 hover:bg-white/10 rounded-xl transition-all text-white/40 hover:text-white">
-                  <Square className="rotate-45" size={28} />
+                <button onClick={() => setShowTextbookModal(false)} className="text-slate-500 hover:text-white">
+                  <PlusSquare className="rotate-45" size={24} />
                 </button>
               </div>
 
@@ -2326,10 +2272,11 @@ export default function App() {
         await getTutorResponse("ping", []);
         setAiStatus('connected');
       } catch (e: any) {
-        console.error('AI Health Check Failed:', e);
         if (e?.message?.includes('429') || e?.status === 429 || e?.message?.includes('quota')) {
+          console.warn('AI Quota Exceeded');
           setAiStatus('quota_exceeded');
         } else {
+          console.error('AI Health Check Failed:', e);
           setAiStatus('error');
         }
       }
@@ -2617,6 +2564,24 @@ export default function App() {
             </div>
           </header>
 
+          {aiStatus === 'quota_exceeded' && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-4 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center gap-4"
+            >
+              <div className="p-2 bg-orange-500/20 rounded-lg">
+                <AlertTriangle className="text-orange-500" size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-orange-400">AI Quota Exceeded</h3>
+                <p className="text-sm text-slate-400">
+                  The AI service is currently unavailable due to high usage limits. Please try again later or verify your API key/plan.
+                </p>
+              </div>
+            </motion.div>
+          )}
+
           <AnimatePresence mode="wait">
             {activeScreen === 'dashboard' && <Dashboard key="dashboard" stats={profile} tasks={tasks} onToggleTask={toggleTask} onNavigate={setActiveScreen} />}
             {activeScreen === 'practice' && <Practice key="practice" profile={profile} user={user} onUpdateStats={updateStats} />}
@@ -2685,42 +2650,39 @@ export default function App() {
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <motion.div 
           animate={{ 
-            scale: [1, 1.3, 1],
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-            rotate: [0, 10, 0]
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-15%] left-[-15%] size-[1000px] bg-indigo-600/30 rounded-full blur-[150px]"
-        ></motion.div>
-        <motion.div 
-          animate={{ 
-            scale: [1.3, 1, 1.3],
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-            rotate: [0, -10, 0]
-          }}
-          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[-15%] right-[-15%] size-[1200px] bg-cyan-600/30 rounded-full blur-[180px]"
-        ></motion.div>
-        <motion.div 
-          animate={{ 
-            opacity: [0.15, 0.3, 0.15],
-            scale: [1, 1.2, 1]
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+            y: [0, 30, 0]
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[25%] right-[15%] size-[800px] bg-pink-500/20 rounded-full blur-[120px]"
+          className="absolute top-[-10%] left-[-10%] size-[800px] bg-purple-600/20 rounded-full blur-[120px]"
         ></motion.div>
         <motion.div 
           animate={{ 
-            opacity: [0.1, 0.25, 0.1],
-            x: [0, 150, 0],
-            y: [0, 100, 0]
+            scale: [1.2, 1, 1.2],
+            x: [0, -50, 0],
+            y: [0, -30, 0]
           }}
-          transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[25%] left-[15%] size-[900px] bg-orange-500/20 rounded-full blur-[150px]"
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[-10%] right-[-10%] size-[900px] bg-blue-600/20 rounded-full blur-[150px]"
         ></motion.div>
-        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '80px 80px' }}></div>
+        <motion.div 
+          animate={{ 
+            opacity: [0.1, 0.2, 0.1],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[20%] right-[10%] size-[600px] bg-pink-500/10 rounded-full blur-[100px]"
+        ></motion.div>
+        <motion.div 
+          animate={{ 
+            opacity: [0.05, 0.15, 0.05],
+            x: [0, 100, 0]
+          }}
+          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[20%] left-[10%] size-[700px] bg-orange-500/10 rounded-full blur-[130px]"
+        ></motion.div>
+        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
       </div>
     </div>
   );

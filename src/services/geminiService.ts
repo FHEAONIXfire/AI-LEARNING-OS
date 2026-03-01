@@ -28,7 +28,7 @@ const cleanJson = (text: string) => {
 
 export const getTutorResponse = async (message: string, history: { role: string, parts: { text: string }[] }[]) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [
       ...history,
       { role: "user", parts: [{ text: message }] }
@@ -44,7 +44,7 @@ export const getTutorResponse = async (message: string, history: { role: string,
 
 export const analyzeSubmission = async (content: string) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Analyze this student submission and provide scores (0-100) and feedback in JSON format. Content: ${content}` }] }],
     config: {
       systemInstruction: "You are an AI Diagnostic Engine. Analyze the submission for Concept Accuracy, Clarity, and Depth. Provide a JSON response with the following structure: { accuracy: number, clarity: number, depth: number, feedback: { title: string, level: string, desc: string }[], suggestions: { title: string, desc: string }[] }",
@@ -63,7 +63,7 @@ export const analyzeSubmission = async (content: string) => {
 
 export const getOnboardingNextStep = async () => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: "I want to set up my profile for the AI Learning OS." }] }],
     config: {
       systemInstruction: "You are an academic advisor for an AI Learning OS tailored for students in Maharashtra, India. Your goal is to ask all necessary questions at once to understand their academic profile (level, subjects, goals). Return a JSON object with an array of questions. Each question must have an id, a label, and a list of 4 relevant options. Structure: { \"questions\": [{ \"id\": \"string\", \"label\": \"string\", \"options\": [\"string\"] }] }",
@@ -82,7 +82,7 @@ export const getOnboardingNextStep = async () => {
 
 export const generatePersonalizedProfile = async (conversationContext: string) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Generate a personalized learning profile based on this student interview:\n\n${conversationContext}\n\nReturn ONLY a JSON object with this exact structure:
     {
       "level_name": "string (e.g., 'HSC Science Learner', 'MU Engineering Student')",
@@ -121,7 +121,7 @@ export const generatePersonalizedProfile = async (conversationContext: string) =
 
 export const generateTutorLesson = async (topic: string, subject: string, level: string) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Explain the topic "${topic}" in the subject "${subject}" for a student at level "${level}". 
     The explanation should be conversational, friendly, and engaging, like a friend teaching a friend. 
     Use analogies and simple language. Keep it concise (under 150 words).` }] }],
@@ -155,7 +155,7 @@ export const generateTutorSpeech = async (text: string) => {
 
 export const generateAdaptiveTest = async (topics: string[], level: string) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Generate a short test (3-5 questions) based on these topics: ${topics.join(', ')}. The student is at level "${level}". Provide the test in JSON format with questions and options.` }] }],
     config: {
       systemInstruction: "You are an AI Examiner. Generate a JSON response with the following structure: { test_title: string, questions: { id: string, question: string, options: string[], correct_option: number, explanation: string }[] }",
@@ -185,7 +185,7 @@ export const solveTextbookQuestion = async (question: string, imageBase64?: stri
   }
 
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts }],
     config: {
       systemInstruction: "You are an expert textbook solver. You provide stepwise, concise, and precise solutions in a proper exam format. Every step should be clear and easy to understand, but avoid unnecessary fluff. DO NOT include phrases like 'Explain Like I'm Five' or 'EL5'. Ensure the tone is helpful and educational.",
@@ -198,7 +198,7 @@ export const solveTextbookQuestion = async (question: string, imageBase64?: stri
 
 export const generateStudyPlan = async (examDates: Record<string, string>, profile: any) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ 
       role: "user", 
       parts: [{ 
@@ -222,7 +222,7 @@ export const generateStudyPlan = async (examDates: Record<string, string>, profi
 
 export const generateVideoScript = async (topic: string, subject: string, level: string, language: string) => {
   const model = ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Create an educational anime-style storyboard about "${topic}" in "${subject}" for a student at level "${level}". 
     The explanation should be simple but detailed (EL5 style).
     
