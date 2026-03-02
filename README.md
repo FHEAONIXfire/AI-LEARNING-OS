@@ -40,24 +40,9 @@ This is a React + TypeScript application powered by Vite and Express.
 ## Deployment
 
 ### Netlify
+NETLIFY URL: https://gilded-babka-b2b4b9.netlify.app/
 
-1.  **Fork/Push to GitHub:**
-    Push your code to a GitHub repository.
 
-2.  **Import to Netlify:**
-    -   Log in to Netlify.
-    -   Click "Add new site" -> "Import an existing project".
-    -   Select your GitHub repository.
-
-3.  **Configure Build Settings:**
-    -   **Build command:** `npm run build`
-    -   **Publish directory:** `dist`
-
-4.  **Set Environment Variables:**
-    In "Site settings" -> "Build & deploy" -> "Environment", add:
-    -   `GEMINI_API_KEY`: Your Gemini API key.
-    -   `VITE_SUPABASE_URL`: (Optional) Your Supabase URL.
-    -   `VITE_SUPABASE_ANON_KEY`: (Optional) Your Supabase Anon Key.
 
 5.  **Deploy:**
     Click "Deploy site".
