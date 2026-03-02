@@ -2268,24 +2268,33 @@ export default function App() {
         if (typeof process !== 'undefined' && process.env && process.env.GEMINI_API_KEY) {
            // @ts-ignore
            key = process.env.GEMINI_API_KEY;
+           console.log("AI Key found in process.env");
         } else if (import.meta.env.VITE_GEMINI_API_KEY) {
            key = import.meta.env.VITE_GEMINI_API_KEY;
+           console.log("AI Key found in import.meta.env.VITE_");
         } else {
            // Try direct access if replaced by Vite
            // @ts-ignore
-           if (process.env.GEMINI_API_KEY) key = process.env.GEMINI_API_KEY;
+           if (process.env.GEMINI_API_KEY) {
+             // @ts-ignore
+             key = process.env.GEMINI_API_KEY;
+             console.log("AI Key found via direct process.env access (Vite replacement)");
+           }
         }
       } catch (e) {
-        // Ignore
+        console.warn("Error checking env vars:", e);
       }
 
       if (!key) {
+        console.error("Gemini API Key is missing!");
         setAiStatus('error');
         return;
       }
       try {
         // Simple verification call
+        console.log("Verifying AI connection...");
         await getTutorResponse("ping", []);
+        console.log("AI Connected successfully");
         setAiStatus('connected');
       } catch (e: any) {
         if (e?.message?.includes('429') || e?.status === 429 || e?.message?.includes('quota')) {
@@ -2598,6 +2607,42 @@ export default function App() {
             </motion.div>
           )}
 
+          {aiStatus === 'error' && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-4"
+            >
+              <div className="p-2 bg-red-500/20 rounded-lg">
+                <AlertTriangle className="text-red-500" size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-red-400">AI Service Unavailable</h3>
+                <p className="text-sm text-slate-400">
+                  Unable to connect to Gemini AI. Please check your API key in .env file and ensure you have restarted the server.
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {supabaseStatus === 'error' && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-4"
+            >
+              <div className="p-2 bg-red-500/20 rounded-lg">
+                <AlertTriangle className="text-red-500" size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-red-400">Database Connection Failed</h3>
+                <p className="text-sm text-slate-400">
+                  Unable to connect to Supabase. Please check your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env file.
+                </p>
+              </div>
+            </motion.div>
+          )}
+
           <AnimatePresence mode="wait">
             {activeScreen === 'dashboard' && <Dashboard key="dashboard" stats={profile} tasks={tasks} onToggleTask={toggleTask} onNavigate={setActiveScreen} />}
             {activeScreen === 'practice' && <Practice key="practice" profile={profile} user={user} onUpdateStats={updateStats} />}
@@ -2645,14 +2690,15 @@ export default function App() {
                   Your personalized AI Learning OS is now active and optimized for your goals.
                 </p>
               </div>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowWelcome(false)}
-                className="px-12 py-4 bg-blue-500 text-white rounded-2xl font-bold text-lg neon-glow-blue hover:brightness-110 transition-all"
+              <button
+                onClick={() => {
+                  console.log("Launch Dashboard clicked");
+                  setShowWelcome(false);
+                }}
+                className="px-12 py-4 bg-blue-500 text-white rounded-2xl font-bold text-lg neon-glow-blue hover:brightness-110 transition-all transform hover:scale-105 active:scale-95 relative z-50"
               >
                 Launch Dashboard
-              </motion.button>
+              </button>
             </motion.div>
 
             {/* Background Effects - Liquid Glass Style */}

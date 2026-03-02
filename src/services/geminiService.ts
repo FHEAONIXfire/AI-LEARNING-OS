@@ -5,27 +5,34 @@ const getApiKey = () => {
   // In Vite, process.env.GEMINI_API_KEY is replaced by the defined value at build time.
   // We must safely check if process is defined to avoid ReferenceError in the browser
   // for variables that Vite does not replace.
+  let key = "";
   if (typeof process !== 'undefined' && process.env) {
-    if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
-    if (process.env.API_KEY) return process.env.API_KEY;
+    if (process.env.GEMINI_API_KEY) key = process.env.GEMINI_API_KEY;
+    else if (process.env.API_KEY) key = process.env.API_KEY;
   } else {
     // If Vite replaced process.env.GEMINI_API_KEY, it will be available directly
     try {
       // @ts-ignore
-      if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+      if (process.env.GEMINI_API_KEY) key = process.env.GEMINI_API_KEY;
     } catch (e) {
       // Ignore ReferenceError if process is not defined and Vite didn't replace it
     }
   }
   
   // @ts-ignore - Handle Vite env vars directly if needed
-  if (typeof import.meta !== 'undefined' && import.meta.env) {
+  if (!key && typeof import.meta !== 'undefined' && import.meta.env) {
     // @ts-ignore
-    if (import.meta.env.VITE_GEMINI_API_KEY) return import.meta.env.VITE_GEMINI_API_KEY;
+    if (import.meta.env.VITE_GEMINI_API_KEY) key = import.meta.env.VITE_GEMINI_API_KEY;
     // @ts-ignore
-    if (import.meta.env.VITE_API_KEY) return import.meta.env.VITE_API_KEY;
+    if (import.meta.env.VITE_API_KEY) key = import.meta.env.VITE_API_KEY;
   }
-  return "";
+  
+  if (!key) {
+    console.warn("Gemini Service: API Key not found in process.env or import.meta.env");
+  } else {
+    console.log("Gemini Service: API Key found");
+  }
+  return key;
 };
 
 const apiKey = getApiKey();
