@@ -2,11 +2,12 @@ import { GoogleGenAI, LiveConnectParameters } from "@google/genai";
 
 // Use process.env for server-side/injected keys, fallback to VITE_ for local dev
 const getApiKey = () => {
-  if (typeof process !== 'undefined' && process.env) {
-    if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
-    if (process.env.API_KEY) return process.env.API_KEY;
-  }
-  // @ts-ignore - Handle Vite env vars
+  // In Vite, process.env.GEMINI_API_KEY is replaced by the defined value at build time
+  // or available at runtime in Node.js environments.
+  if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+  if (process.env.API_KEY) return process.env.API_KEY;
+  
+  // @ts-ignore - Handle Vite env vars directly if needed
   if (typeof import.meta !== 'undefined' && import.meta.env) {
     // @ts-ignore
     if (import.meta.env.VITE_GEMINI_API_KEY) return import.meta.env.VITE_GEMINI_API_KEY;

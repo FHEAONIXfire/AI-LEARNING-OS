@@ -62,6 +62,30 @@ This is a React + TypeScript application powered by Vite and Express.
 5.  **Deploy:**
     Click "Deploy site".
 
+## Troubleshooting
+
+### Local Development Issues
+
+-   **"GEMINI_API_KEY is missing":**
+    Ensure you have created a `.env` file in the root directory (copy from `.env.example`) and added your key.
+    
+-   **"Port 3000 already in use":**
+    Change the port in `.env` or kill the process using port 3000.
+
+-   **"tsx: command not found":**
+    Run `npm install` again to ensure all dependencies are installed.
+
+### Netlify Deployment Issues
+
+-   **"Build failed":**
+    Check the Netlify build logs. Ensure you have set the `GEMINI_API_KEY` in Netlify's **Site settings > Build & deploy > Environment variables**.
+
+-   **"Page not found" on refresh:**
+    Ensure the `netlify.toml` file exists in your repository. It handles the redirects for the Single Page Application.
+
+-   **"AI Quota Exceeded":**
+    This means your Gemini API key has hit its rate limit. This is common on free tiers. Wait a few minutes or upgrade your plan.
+
 ## Project Structure
 
 -   `src/`: Frontend source code (React)
