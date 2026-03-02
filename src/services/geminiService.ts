@@ -2,10 +2,21 @@ import { GoogleGenAI, LiveConnectParameters } from "@google/genai";
 
 // Use process.env for server-side/injected keys, fallback to VITE_ for local dev
 const getApiKey = () => {
-  // In Vite, process.env.GEMINI_API_KEY is replaced by the defined value at build time
-  // or available at runtime in Node.js environments.
-  if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
-  if (process.env.API_KEY) return process.env.API_KEY;
+  // In Vite, process.env.GEMINI_API_KEY is replaced by the defined value at build time.
+  // We must safely check if process is defined to avoid ReferenceError in the browser
+  // for variables that Vite does not replace.
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+    if (process.env.API_KEY) return process.env.API_KEY;
+  } else {
+    // If Vite replaced process.env.GEMINI_API_KEY, it will be available directly
+    try {
+      // @ts-ignore
+      if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+    } catch (e) {
+      // Ignore ReferenceError if process is not defined and Vite didn't replace it
+    }
+  }
   
   // @ts-ignore - Handle Vite env vars directly if needed
   if (typeof import.meta !== 'undefined' && import.meta.env) {
@@ -17,9 +28,11 @@ const getApiKey = () => {
   return "";
 };
 
-export const ai = new GoogleGenAI({ apiKey: getApiKey() });
+const apiKey = getApiKey();
+export const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export const connectLive = (config: LiveConnectParameters) => {
+  if (!ai) throw new Error("Gemini API Key is missing. Please check your .env file.");
   return ai.live.connect(config);
 };
 
@@ -28,6 +41,7 @@ const cleanJson = (text: string) => {
 };
 
 export const getTutorResponse = async (message: string, history: { role: string, parts: { text: string }[] }[]) => {
+  if (!ai) throw new Error("Gemini API Key is missing.");
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [
@@ -44,6 +58,7 @@ export const getTutorResponse = async (message: string, history: { role: string,
 };
 
 export const analyzeSubmission = async (content: string) => {
+  if (!ai) return {};
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Analyze this student submission and provide scores (0-100) and feedback in JSON format. Content: ${content}` }] }],
@@ -63,6 +78,7 @@ export const analyzeSubmission = async (content: string) => {
 };
 
 export const getOnboardingNextStep = async () => {
+  if (!ai) return { questions: [] };
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: "I want to set up my profile for the AI Learning OS." }] }],
@@ -82,6 +98,7 @@ export const getOnboardingNextStep = async () => {
 };
 
 export const generatePersonalizedProfile = async (conversationContext: string) => {
+  if (!ai) return {};
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Generate a personalized learning profile based on this student interview:\n\n${conversationContext}\n\nReturn ONLY a JSON object with this exact structure:
@@ -121,6 +138,7 @@ export const generatePersonalizedProfile = async (conversationContext: string) =
 };
 
 export const generateTutorLesson = async (topic: string, subject: string, level: string) => {
+  if (!ai) return "AI Service Unavailable";
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Explain the topic "${topic}" in the subject "${subject}" for a student at level "${level}". 
@@ -136,6 +154,7 @@ export const generateTutorLesson = async (topic: string, subject: string, level:
 };
 
 export const generateTutorSpeech = async (text: string) => {
+  if (!ai) return null;
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
     contents: [{ parts: [{ text }] }],
@@ -155,6 +174,7 @@ export const generateTutorSpeech = async (text: string) => {
 };
 
 export const generateAdaptiveTest = async (topics: string[], level: string) => {
+  if (!ai) return { test_title: "Adaptive Test", questions: [] };
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Generate a short test (3-5 questions) based on these topics: ${topics.join(', ')}. The student is at level "${level}". Provide the test in JSON format with questions and options.` }] }],
@@ -174,6 +194,7 @@ export const generateAdaptiveTest = async (topics: string[], level: string) => {
 };
 
 export const solveTextbookQuestion = async (question: string, imageBase64?: string, mimeType?: string) => {
+  if (!ai) return "AI Service Unavailable";
   const parts: any[] = [{ text: `Solve this textbook question: ${question}. Provide the answer in a stepwise format according to exam standards. Every step should be detailed and nicely explained so a student can easily understand it.` }];
   
   if (imageBase64) {
@@ -198,6 +219,7 @@ export const solveTextbookQuestion = async (question: string, imageBase64?: stri
 };
 
 export const generateStudyPlan = async (examDates: Record<string, string>, profile: any) => {
+  if (!ai) return { timetable: [], daily_goals: [] };
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ 
@@ -222,6 +244,7 @@ export const generateStudyPlan = async (examDates: Record<string, string>, profi
 };
 
 export const generateVideoScript = async (topic: string, subject: string, level: string, language: string) => {
+  if (!ai) return { scenes: [], exam_tricks: [] };
   const model = ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: `Create an educational anime-style storyboard about "${topic}" in "${subject}" for a student at level "${level}". 
@@ -257,6 +280,7 @@ export const generateVideoScript = async (topic: string, subject: string, level:
 };
 
 export const generateAnimeImage = async (prompt: string) => {
+  if (!ai) return null;
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash-image',
     contents: {
@@ -285,6 +309,7 @@ export const generateAnimeImage = async (prompt: string) => {
 };
 
 export const generateMultiSpeakerVoiceover = async (script: string, language: string) => {
+  if (!ai) return null;
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
     contents: [{ parts: [{ text: `In ${language}, narrate this script naturally like a storyteller: ${script}` }] }],

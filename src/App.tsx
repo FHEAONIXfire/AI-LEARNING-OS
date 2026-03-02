@@ -2262,7 +2262,23 @@ export default function App() {
 
     // Check AI connection
     const checkAI = async () => {
-      const key = process.env.GEMINI_API_KEY;
+      let key = '';
+      try {
+        // @ts-ignore
+        if (typeof process !== 'undefined' && process.env && process.env.GEMINI_API_KEY) {
+           // @ts-ignore
+           key = process.env.GEMINI_API_KEY;
+        } else if (import.meta.env.VITE_GEMINI_API_KEY) {
+           key = import.meta.env.VITE_GEMINI_API_KEY;
+        } else {
+           // Try direct access if replaced by Vite
+           // @ts-ignore
+           if (process.env.GEMINI_API_KEY) key = process.env.GEMINI_API_KEY;
+        }
+      } catch (e) {
+        // Ignore
+      }
+
       if (!key) {
         setAiStatus('error');
         return;
