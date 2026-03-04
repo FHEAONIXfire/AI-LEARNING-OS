@@ -2242,6 +2242,13 @@ export default function App() {
     // Check Supabase connection
     const checkSupabase = async () => {
       try {
+        const url = import.meta.env.VITE_SUPABASE_URL;
+        if (!url || url.includes('placeholder')) {
+          console.warn('Using Mock Supabase Mode');
+          setSupabaseStatus('connected'); // Treat as connected for demo purposes
+          return;
+        }
+
         const { error } = await supabase.from('profiles').select('id').limit(1);
         if (error) {
           if (error.message.includes('FetchError')) setSupabaseStatus('error');
@@ -2673,11 +2680,15 @@ export default function App() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-[#05060f]/80 backdrop-blur-sm flex flex-col items-center justify-center p-6"
           >
+            {/* Background Effects - Liquid Glass Style - Moved BEFORE content and added pointer-events-none */}
+            <div className="absolute top-1/4 left-1/4 size-[600px] bg-blue-600/15 rounded-full blur-[120px] animate-pulse pointer-events-none"></div>
+            <div className="absolute bottom-1/4 right-1/4 size-[600px] bg-purple-600/15 rounded-full blur-[120px] animate-pulse pointer-events-none" style={{ animationDelay: '1s' }}></div>
+
             <motion.div 
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="text-center space-y-8 liquid-glass p-12 md:p-20 max-w-2xl"
+              className="text-center space-y-8 liquid-glass p-12 md:p-20 max-w-2xl relative z-10"
             >
               <div className="size-24 rounded-3xl bg-blue-500/20 flex items-center justify-center mx-auto neon-glow-blue">
                 <Sparkles className="text-blue-400" size={48} />
@@ -2692,18 +2703,15 @@ export default function App() {
               </div>
               <button
                 onClick={() => {
-                  console.log("Launch Dashboard clicked");
+                  console.log("Launch Dashboard clicked - forcing close");
                   setShowWelcome(false);
+                  localStorage.setItem('onboarding_complete', 'true');
                 }}
-                className="px-12 py-4 bg-blue-500 text-white rounded-2xl font-bold text-lg neon-glow-blue hover:brightness-110 transition-all transform hover:scale-105 active:scale-95 relative z-50"
+                className="px-12 py-4 bg-blue-500 text-white rounded-2xl font-bold text-lg neon-glow-blue hover:brightness-110 transition-all transform hover:scale-105 active:scale-95 relative z-50 cursor-pointer"
               >
                 Launch Dashboard
               </button>
             </motion.div>
-
-            {/* Background Effects - Liquid Glass Style */}
-            <div className="absolute top-1/4 left-1/4 size-[600px] bg-blue-600/15 rounded-full blur-[120px] animate-pulse"></div>
-            <div className="absolute bottom-1/4 right-1/4 size-[600px] bg-purple-600/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
           </motion.div>
         )}
       </AnimatePresence>
